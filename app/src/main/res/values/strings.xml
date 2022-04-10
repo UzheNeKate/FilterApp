@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FilterApp</string>
+    <string name="load_picture_label">Load your picture to try improve it!</string>
+    <string name="hello_label">Hello!</string>
+    <string name="load_picture">Load picture</string>
+    <string name="view_filters">View filters</string>
+    <string name="save">Save</string>
+    <string name="successfully_saved">Photo successfully saved!</string>
+</resources>
