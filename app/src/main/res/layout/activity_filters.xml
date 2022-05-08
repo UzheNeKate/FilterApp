@@ -39,49 +39,51 @@
 
             <Button
                 android:id="@+id/btnSource"
-                android:background="@drawable/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/button"
                 android:shadowColor="#009688"
+                android:text="@string/source"
+                android:textColor="#37474F"
                 android:textColorHighlight="#009688"
-                app:rippleColor="#8BC34A"
-                android:text="SOURCE" />
+                app:rippleColor="#8BC34A" />
 
             <Button
                 android:id="@+id/btnMedian"
-                android:background="@drawable/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="MEDIAN FILTER" />
+                android:background="@drawable/button"
+                android:text="@string/median_filter"
+                android:textColor="#37474F" />
 
             <Button
-                android:id="@+id/button5"
-                android:background="@drawable/button"
+                android:id="@+id/btnLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button"
-                />
+                android:background="@drawable/button"
+                android:text="@string/linear_contrast"
+                android:textColor="#37474F" />
 
             <Button
-                android:id="@+id/button6"
-                android:background="@drawable/button"
+                android:id="@+id/btnBgRgb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button"
-                />
+                android:background="@drawable/button"
+                android:text="@string/equalize_rgb"
+                android:textColor="#37474F" />
 
             <Button
-                android:id="@+id/button7"
-                android:background="@drawable/button"
+                android:id="@+id/btnGaussian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button"
-                />
+                android:background="@drawable/button"
+                android:text="@string/gaussian"
+                android:textColor="#37474F" />
         </LinearLayout>
     </HorizontalScrollView>
 

@@ -1,8 +1,10 @@
 package by.cw.filterapp;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,44 +28,68 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import by.cw.filterapp.filters.BarGraph;
+import by.cw.filterapp.filters.GaussianFilter;
+import by.cw.filterapp.filters.LinearContrast;
+import by.cw.filterapp.filters.MedianFilter;
+import by.cw.filterapp.filters.tasks.BarGraphTask;
+import by.cw.filterapp.filters.tasks.GaussianFilterTask;
+import by.cw.filterapp.filters.tasks.LinearContrastTask;
+import by.cw.filterapp.filters.tasks.MedianFilterTask;
+
 public class FiltersActivity extends AppCompatActivity {
 
     ImageView imageView;
     Button medianButton;
     Button sourceButton;
+    Button linearButton;
+    Button gaussianButton;
+    Button barGraphRgbButton;
+    Button pressedButton;
 
     Bitmap current;
-    Bitmap sourceBitmap;
-    Bitmap medianBitmap;
+    public Bitmap sourceBitmap;
+    public Bitmap medianBitmap;
+    public Bitmap linearContrastBitmap;
+    public Bitmap gaussianBitmap;
+    public Bitmap barGraphRgbBitmap;
     //... все фильтры
+    //гауссов фильтр (средневзвешенный)
+    //посмотреть новые в кг презах где медианный
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filters);
+        setTitle(getString(R.string.filter_activity_title));
 
         imageView = findViewById(R.id.imv);
         medianButton = findViewById(R.id.btnMedian);
         sourceButton = findViewById(R.id.btnSource);
+        linearButton = findViewById(R.id.btnLinear);
+        gaussianButton = findViewById(R.id.btnGaussian);
+        barGraphRgbButton = findViewById(R.id.btnBgRgb);
+
+        pressedButton = sourceButton;
+        sourceButton.setEnabled(false);
+        sourceButton.setAlpha(0.3f);
 
         medianButton.setOnClickListener(this::OnMedianClick);
+        linearButton.setOnClickListener(this::OnLinearClick);
         sourceButton.setOnClickListener(this::OnSourceClick);
+        gaussianButton.setOnClickListener(this::OnGaussianClick);
+        barGraphRgbButton.setOnClickListener(this::OnBarGraphRgbClick);
 
-        //Bitmap bitmap = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
-        //Uri uri = Uri.parse(getIntent().getStringExtra("img"));
         Uri uri = getIntent().getParcelableExtra("img");
         imageView.setImageURI(uri);
 
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-        sourceBitmap = bitmap;
+        sourceBitmap = drawable.getBitmap();
         current = sourceBitmap;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.filters_menu_actions, menu);
         return super.onCreateOptionsMenu(menu);
@@ -81,6 +107,16 @@ public class FiltersActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.sure_to_exit)
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, (dialog, id) -> FiltersActivity.this.finish())
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
     private void saveImage(View v) {
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
@@ -93,7 +129,6 @@ public class FiltersActivity extends AppCompatActivity {
         }
 
         String root = Environment.getExternalStorageDirectory().toString();
-        System.out.println(root);
         File myDir = new File(root + "/saved_images");
         myDir.mkdirs();
 
@@ -105,6 +140,7 @@ public class FiltersActivity extends AppCompatActivity {
             file.delete ();
         try {
             FileOutputStream out = new FileOutputStream(file);
+            current = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
             current.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
@@ -114,34 +150,91 @@ public class FiltersActivity extends AppCompatActivity {
             ).show();
         } catch (Exception e) {
             e.printStackTrace();
+            Snackbar.make(
+                    v, getString(R.string.wrong_save), BaseTransientBottomBar.LENGTH_SHORT
+            ).show();
         }
     }
 
     private void OnMedianClick(View v) {
+        pressedButton.setAlpha(1);
+        pressedButton.setEnabled(true);
+        pressedButton = medianButton;
+        medianButton.setAlpha(0.3f);
+        medianButton.setEnabled(false);
+
         if (medianBitmap != null) {
             imageView.setImageBitmap(medianBitmap);
             return;
         }
         imageView.invalidate();
 
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//            Color rgb = Color.valueOf(sourceBitmap.getPixel(1,3));
-//            float[] hsv = new float[3];
-//            Color.colorToHSV(sourceBitmap.getPixel(1,3), hsv);
-//        }
+        MedianFilter mf = new MedianFilter(sourceBitmap);
+        MedianFilterTask task = new MedianFilterTask(mf, imageView, FiltersActivity.this);
+        task.execute();
+    }
 
-        Bitmap bitmap = sourceBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        bitmap.setWidth(3);
+    private void OnLinearClick(View v){
+        pressedButton.setAlpha(1);
+        pressedButton.setEnabled(true);
+        pressedButton = linearButton;
+        linearButton.setAlpha(0.3f);
+        linearButton.setEnabled(false);
 
-        medianBitmap = bitmap;
-        imageView.setImageBitmap(medianBitmap);
-//        medianBitmap = filterImage();
-//        imageView.setImageBitmap(medianBitmap);
-        current = medianBitmap;
+        if (linearContrastBitmap != null) {
+            imageView.setImageBitmap(linearContrastBitmap);
+            return;
+        }
+        imageView.invalidate();
+
+        LinearContrast lc = new LinearContrast(sourceBitmap);
+        LinearContrastTask task = new LinearContrastTask(lc, imageView, FiltersActivity.this);
+        task.execute();
+    }
+
+    private void OnBarGraphRgbClick(View view) {
+        pressedButton.setAlpha(1);
+        pressedButton.setEnabled(true);
+        pressedButton = barGraphRgbButton;
+        barGraphRgbButton.setAlpha(0.3f);
+        barGraphRgbButton.setEnabled(false);
+
+        if (barGraphRgbBitmap != null) {
+            imageView.setImageBitmap(barGraphRgbBitmap);
+            return;
+        }
+        imageView.invalidate();
+
+        BarGraph bg = new BarGraph(sourceBitmap);
+        BarGraphTask task = new BarGraphTask(bg, imageView, FiltersActivity.this);
+        task.execute();
+    }
+
+    private void OnGaussianClick(View view) {
+        pressedButton.setAlpha(1);
+        pressedButton.setEnabled(true);
+        pressedButton = gaussianButton;
+        gaussianButton.setAlpha(0.3f);
+        gaussianButton.setEnabled(false);
+
+        if (gaussianBitmap != null) {
+            imageView.setImageBitmap(gaussianBitmap);
+            return;
+        }
+        imageView.invalidate();
+
+        GaussianFilter gf = new GaussianFilter(sourceBitmap);
+        GaussianFilterTask task = new GaussianFilterTask(gf, imageView, FiltersActivity.this);
+        task.execute();
     }
 
     private void OnSourceClick(View v) {
+        pressedButton.setAlpha(1);
+        pressedButton.setEnabled(true);
+        pressedButton = sourceButton;
+        sourceButton.setAlpha(0.3f);
+        sourceButton.setEnabled(false);
+
         imageView.setImageBitmap(sourceBitmap);
-        current = sourceBitmap;
     }
 }

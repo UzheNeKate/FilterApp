@@ -6,4 +6,17 @@
     <string name="view_filters">View filters</string>
     <string name="save">Save</string>
     <string name="successfully_saved">Photo successfully saved!</string>
+    <string name="filter_activity_title">Filter image</string>
+    <string name="sure_to_exit">Are you sure you want to exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="something_wrong">Oops! Something wrong! Cannot filter this image</string>
+    <string name="median_filter">MEDIAN FILTER</string>
+    <string name="equalize_rgb">Equalize RGB</string>
+    <string name="linear_contrast">LINEAR CONTRAST</string>
+    <string name="gaussian">Gaussian</string>
+    <string name="source">SOURCE</string>
+    <string name="notification_processed">Your image is processed!</string>
+    <string name="notification">Notification</string>
+    <string name="wrong_save">Cannot save(((</string>
 </resources>

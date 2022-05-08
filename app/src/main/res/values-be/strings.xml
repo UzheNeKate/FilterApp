@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FilterApp</string>
+    <string name="hello_label">Прывітанне!</string>
+    <string name="view_filters">Праглядзець фільтры</string>
+    <string name="save">Захаваць</string>
+    <string name="successfully_saved">Фотаздымак паспяхова захаваны!</string>
+    <string name="filter_activity_title">Апрацоўка выявы</string>
+    <string name="sure_to_exit">Сапраўды хаціце выйсці?</string>
+    <string name="yes">Так</string>
+    <string name="no">Не</string>
+    <string name="something_wrong">Нешта здарылася! Немагчыма апрацаваць выяву</string>
+    <string name="median_filter">Медыянны фільтр</string>
+    <string name="notification">Паведамленне</string>
+    <string name="notification_processed">Ваша выява апрацована!</string>
+    <string name="source">Зыходнае</string>
+    <string name="gaussian">"Фільтр Гауса "</string>
+    <string name="linear_contrast">Лінейнае кантраставанне</string>
+    <string name="equalize_rgb">Эквалізацыя гістаграмы</string>
+    <string name="load_picture">Выбраць выяву</string>
+    <string name="load_picture_label">Загрузіце малюнак каб палепшыць яго!</string>
+    <string name="wrong_save">Немагчыма захаваць(((</string>
+</resources>
