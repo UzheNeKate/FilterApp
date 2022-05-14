@@ -54,7 +54,7 @@ public class LinearContrastTask extends AsyncTask<Void, Void, Bitmap> {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(main);
         notificationManager.notify(NOTIFY_ID, builder.build());
-        Log.i("beeeeeeeeeeeeeeeeee", "*******************************tut");//убрать везде
+        //Log.i("beeeeeeeeeeeeeeeeee", "*******************************tut");//убрать везде
     }
 
     void createNotificationChannel() {

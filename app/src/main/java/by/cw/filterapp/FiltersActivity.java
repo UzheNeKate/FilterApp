@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,9 +52,6 @@ public class FiltersActivity extends AppCompatActivity {
     public Bitmap linearContrastBitmap;
     public Bitmap gaussianBitmap;
     public Bitmap barGraphRgbBitmap;
-    //... все фильтры
-    //гауссов фильтр (средневзвешенный)
-    //посмотреть новые в кг презах где медианный
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,11 +129,11 @@ public class FiltersActivity extends AppCompatActivity {
         myDir.mkdirs();
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fname = "filter_"+ timeStamp +".jpg";
+        String fname = "filtered_"+ timeStamp +".jpg";
 
         File file = new File(myDir, fname);
         if (file.exists())
-            file.delete ();
+            file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
             current = ((BitmapDrawable)imageView.getDrawable()).getBitmap();

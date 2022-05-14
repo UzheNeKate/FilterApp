@@ -54,7 +54,7 @@ public class BarGraphTask extends AsyncTask<Void, Void, Bitmap> {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(main);
         notificationManager.notify(NOTIFY_ID, builder.build());
-        Log.i("beeeeeeeeeeeeeeeeee", "*******************************tut");
+        //Log.i("beeeeeeeeeeeeeeeeee", "*******************************tut");
     }
 
     void createNotificationChannel() {
